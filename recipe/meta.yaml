@@ -1,4 +1,4 @@
-{% set version = '1.0.10' %}
+{% set version = '1.0.11' %}
 
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
@@ -12,16 +12,23 @@ source:
   url:
     - https://cran.r-project.org/src/contrib/doParallel_{{ version }}.tar.gz
     - https://cran.r-project.org/src/contrib/Archive/doParallel/doParallel_{{ version }}.tar.gz
-  sha256: 70024b6950025cc027022ee409f382e5ad3680c0a25bcd404bfc16418be8add5
+  sha256: 4ccbd2eb46d3e4f5251b0c3de4d93d9168b02bb0be493656d6aea236667ff76a
+
+
+  # patches:
+   # List any patch files here
+   # - fix.patch
 
 build:
+  # If this is a new build for the same version, increment the build number.
   number: 0
-  skip: true  # [win32]
 
+  # This is required to make R link correctly on Linux.
   rpaths:
     - lib/R/lib/
     - lib/
 
+# Suggests: caret, mlbench, rpart
 requirements:
   build:
     - r-base
@@ -35,8 +42,15 @@ requirements:
 
 test:
   commands:
-    - $R -e "library('doParallel')"  # [not win]
+    # You can put additional test commands to be run here.
+    - $R -e "library('doParallel')"           # [not win]
     - "\"%R%\" -e \"library('doParallel')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
 
 about:
   home: https://CRAN.R-project.org/package=doParallel
@@ -48,3 +62,30 @@ extra:
   recipe-maintainers:
     - johanneskoester
     - bgruening
+    - mingwandroid
+
+# The original CRAN metadata for this package was:
+
+# Package: doParallel
+# Type: Package
+# Title: Foreach Parallel Adaptor for the 'parallel' Package
+# Version: 1.0.11
+# Authors@R: c(person("Rich", "Calaway", role="cre", email="richcala@microsoft.com"), person("Microsoft", "Corporation", role=c("aut", "cph")), person("Steve", "Weston", role="aut"), person("Dan", "Tenenbaum", role="ctb"))
+# Description: Provides a parallel backend for the %dopar% function using the parallel package.
+# Depends: R (>= 2.14.0), foreach(>= 1.2.0), iterators(>= 1.0.0), parallel, utils
+# Suggests: caret, mlbench, rpart
+# Enhances: compiler, RUnit
+# License: GPL-2
+# Author: Rich Calaway [cre], Microsoft Corporation [aut, cph], Steve Weston [aut], Dan Tenenbaum [ctb]
+# Maintainer: Rich Calaway <richcala@microsoft.com>
+# Repository: CRAN
+# Repository/R-Forge/Project: doparallel
+# Repository/R-Forge/Revision: 16
+# Repository/R-Forge/DateTimeStamp: 2017-09-18 23:27:23
+# Date/Publication: 2017-09-28 16:24:39 UTC
+# NeedsCompilation: no
+# Packaged: 2017-09-18 23:46:05 UTC; rforge
+
+# See
+# http://docs.continuum.io/conda/build.html for
+# more information about meta.yaml
